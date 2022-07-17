@@ -18,7 +18,7 @@ public class Messages : MonoBehaviour
 
     public void PUNConnectedSuccessfully()
     {
-        myText.text += "\nConnected to server and joined the room successfully";
+        myText.text += "\nConnected to server and joined lobby successfully";
     }
 
     // Update is called once per frame
