@@ -6,7 +6,7 @@ using Photon.Pun;
 public class MyPUNBacis : MonoBehaviourPunCallbacks
 {
     private const string defaultRoom = "default_room";
-    private bool joinedRoom = false;
+    public static bool joinedRoom = false;
     
     void Start()
     {
