@@ -5,52 +5,58 @@ using Photon.Pun;
 
 public class MyPUNBacis : MonoBehaviourPunCallbacks
 {
+    private const string defaultRoom = "default_room";
     private bool joinedRoom = false;
-    public Messages myMessages;
-    // Start is called before the first frame update
+    
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        StartCoroutine(DoublecheckIfJoinedRoom());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator DoublecheckIfJoinedRoom()
     {
-        if (joinedRoom)
+        bool isJobDone = false;
+        while (!isJobDone)
         {
-            Debug.Log("We joined the room");
+            if (joinedRoom)
+            {
+                Debug.Log("We joined the room");
+                isJobDone = true;
+            }
+            yield return new WaitForSeconds(0.2f);
         }
     }
+
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
     }
+
     public override void OnJoinedLobby()
     {
-        //TextViaCoroutine.singleton.proTextMesh.text = "Successfully joined the lobby";
-        myMessages.PUNConnectedSuccessfully();
-        PhotonNetwork.CreateRoom("dupa");
-        StartCoroutine(JoinRoom());
-        Debug.Log("not crashed");
-
+        Messages.PUNConnectedSuccessfully();
+        PhotonNetwork.CreateRoom(defaultRoom);
+        StartCoroutine(JoinRoomCreatedByOtherPlayer());
     }
     public override void OnJoinedRoom()
     {
+        Messages.PUNJoinedRoom();
         joinedRoom = true;
-        Debug.Log("joined ther rooom");
     }
 
     public override void OnCreatedRoom()
     {
         Debug.Log("Created room");
+        Messages.PUNCreatedRoom();
     }
 
-    public IEnumerator JoinRoom()
+    public IEnumerator JoinRoomCreatedByOtherPlayer()
     {
         yield return new WaitForSeconds(3f);
         if (!joinedRoom)
         {
-            PhotonNetwork.JoinRoom("dupa");
+            PhotonNetwork.JoinRoom(defaultRoom);
         }
     }
 }

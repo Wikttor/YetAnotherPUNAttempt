@@ -5,10 +5,12 @@ using TMPro;
 
 public class Messages : MonoBehaviour
 {
+    public static Messages instance;
     public TextMeshProUGUI myText;
-    // Start is called before the first frame update
+
     void Start()
     {
+        instance = this;
         myText = this.GetComponent<TextMeshProUGUI>();
         if (myText == null)
         {
@@ -16,14 +18,29 @@ public class Messages : MonoBehaviour
         }
     }
 
-    public void PUNConnectedSuccessfully()
+    public static void DisplayMessage(string message)
     {
-        myText.text += "\nConnected to server and joined lobby successfully";
+        if (instance != null)
+        {
+            instance.myText.text += "\n" + message;
+        }
+        else
+        {
+            Debug.Log("There is no Messages class instance");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void PUNConnectedSuccessfully()
     {
-        
+        DisplayMessage("Connected to server and joined lobby successfully");
+    }
+    public static void PUNCreatedRoom()
+    {
+        DisplayMessage("Successfully created a room");
+    }
+    public static void PUNJoinedRoom()
+    {
+        DisplayMessage("Succesfully joined a room");
     }
 }
+
