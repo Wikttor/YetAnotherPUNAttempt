@@ -40,6 +40,8 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_MessageDisplayedOnAllClients
+  - RPC_CalculatePing
+  - RPC_Pong
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -7,6 +7,7 @@ public class FirstRPCCarrier : MonoBehaviour
 {
     public static FirstRPCCarrier instance;
     private static PhotonView myPhotonView;
+    public static Ping ping;
 
     public static void ButtonPressed()
     {
@@ -39,6 +40,7 @@ public class FirstRPCCarrier : MonoBehaviour
             Messages.DisplayMessage("Unneccesarily spawned surplus RPC Carrier at " + Time.time.ToString()   );
             Destroy(this);
         }
+        this.gameObject.AddComponent<Ping>();
     }
     [PunRPC]
     void RPC_MessageDisplayedOnAllClients()
