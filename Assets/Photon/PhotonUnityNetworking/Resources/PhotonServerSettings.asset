@@ -42,6 +42,11 @@ MonoBehaviour:
   - RPC_MessageDisplayedOnAllClients
   - RPC_CalculatePing
   - RPC_Pong
+  - RPC_EndOfTurn
+  - RPC_EOTCancellationConfirmed
+  - RPC_OpponentCancelledEOT
+  - RPC_OpponentDeclaredEOT
+  - RPC_StartGame
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

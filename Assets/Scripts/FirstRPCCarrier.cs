@@ -8,6 +8,7 @@ public class FirstRPCCarrier : MonoBehaviour
     public static FirstRPCCarrier instance;
     private static PhotonView myPhotonView;
     public static Ping ping;
+    public static TurnSync turnSync;
 
     public static void ButtonPressed()
     {
@@ -41,6 +42,7 @@ public class FirstRPCCarrier : MonoBehaviour
             Destroy(this);
         }
         this.gameObject.AddComponent<Ping>();
+        this.gameObject.AddComponent <TurnSync>() ;
     }
     [PunRPC]
     void RPC_MessageDisplayedOnAllClients()
