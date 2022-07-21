@@ -47,6 +47,10 @@ MonoBehaviour:
   - RPC_OpponentCancelledEOT
   - RPC_OpponentDeclaredEOT
   - RPC_StartGame
+  - OpponentSentHisRPCChoice
+  - RPC_RPSYouLost
+  - RPC_RPSYouTied
+  - RPC_RPSYouWon
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

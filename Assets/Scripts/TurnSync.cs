@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class TurnSync : MonoBehaviour
 {
+    private RockPaperScissors.RPS myChoice;
     public static TurnSync instance;
     private PhotonView myPhotonView;
     public int turnID = 0;
@@ -78,6 +79,7 @@ public class TurnSync : MonoBehaviour
         }       
     }
 
+
     IEnumerator StartNewTurnAfterDelay()
     {
         yield return new WaitForSeconds(2f);
@@ -102,6 +104,74 @@ public class TurnSync : MonoBehaviour
     {
         state = turnState.Waiting;
         myPhotonView.RPC("RPC_OpponentDeclaredEOT", RpcTarget.OthersBuffered, null);
+    }
+
+    public static void PlayRockPaperScissors(RockPaperScissors.RPS choice)
+    {
+        instance.myChoice = choice;
+        object[] rpcParams = new object[1];
+        rpcParams[0] = choice;
+        state = turnState.Waiting;
+        instance.myPhotonView.RPC("OpponentSentHisRPCChoice", RpcTarget.Others, rpcParams);
+        //instance.myPhotonView.RPC("RPC_OpponentDeclaredEOT", RpcTarget.OthersBuffered, null); 
+
+    }
+    [PunRPC]
+    void OpponentSentHisRPCChoice(RockPaperScissors.RPS choice)
+    {
+        if (state == turnState.Waiting)
+        {
+            object[] rpcParams = new object[1];
+            rpcParams[0] = turnID;
+            RPSResolve(choice);
+            myPhotonView.RPC("RPC_EndOfTurn", RpcTarget.AllViaServer, rpcParams);
+        }
+        else
+        {
+            Messages.DisplayMessage("Opponent is waiting to end this turn");
+        }
+    }
+
+    void RPSResolve(RockPaperScissors.RPS opponentsChoice)
+    {
+        if(
+            (myChoice == RockPaperScissors.RPS.rock && opponentsChoice == RockPaperScissors.RPS.scissors) ||
+            (myChoice == RockPaperScissors.RPS.paper && opponentsChoice == RockPaperScissors.RPS.rock) ||
+            (myChoice == RockPaperScissors.RPS.scissors&& opponentsChoice == RockPaperScissors.RPS.paper)
+            )
+        {
+            myPhotonView.RPC("RPC_RPSYouLost", RpcTarget.Others, null);
+            Messages.DisplayMessage("You won");
+        }
+        else if (
+            (myChoice == RockPaperScissors.RPS.rock && opponentsChoice == RockPaperScissors.RPS.paper) ||
+            (myChoice == RockPaperScissors.RPS.paper && opponentsChoice == RockPaperScissors.RPS.scissors) ||
+            (myChoice == RockPaperScissors.RPS.scissors && opponentsChoice == RockPaperScissors.RPS.rock)
+            )
+        {
+            myPhotonView.RPC("RPC_RPSYouWon", RpcTarget.Others, null);
+            Messages.DisplayMessage("You lost");
+        }
+        else
+        {
+            myPhotonView.RPC("RPC_RPSYouTied", RpcTarget.Others, null);
+            Messages.DisplayMessage("You Tied");
+        }
+    }
+    [PunRPC]
+    void RPC_RPSYouWon()
+    {
+        Messages.DisplayMessage("You won");
+    }
+    [PunRPC]
+    void RPC_RPSYouLost()
+    {
+        Messages.DisplayMessage("You lost");
+    }
+    [PunRPC]
+    void RPC_RPSYouTied()
+    {
+        Messages.DisplayMessage("You Tied");
     }
     [PunRPC]
     void RPC_OpponentDeclaredEOT()
