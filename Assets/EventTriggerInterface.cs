@@ -15,9 +15,22 @@ public class EventTriggerInterface : EventTrigger
         switch (triggerType)
         {
             case supportedEvents.OnPointerDown:
-                onPointerDownEvent = action;
+                if(onPointerDownEvent == null)
+                {
+                    onPointerDownEvent = action;
+                }
+                else
+                {
+                    onPointerDownEvent += action;
+                }
                 break;
         }
+    }
+
+    public static void AddEventTriggerStatic(supportedEvents triggerType, Action action, GameObject triggeringObject)
+    {
+        EventTriggerInterface component = triggeringObject.AddComponent<EventTriggerInterface>();
+        component.AddEventTrigger(triggerType, action);
     }
     public override void OnPointerDown(PointerEventData eventData)
     {
